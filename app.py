@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_file
 
 app = Flask(__name__)
 
@@ -11,6 +11,14 @@ def call_api():
         file.write(message + '\n')
     
     return jsonify({"message": message})
+
+@app.route('/api/view', methods=['GET'])
+def view_file():
+    try:
+        # Send the output.txt file for download/viewing
+        return send_file('output.txt', as_attachment=False)
+    except FileNotFoundError:
+        return jsonify({"error": "File not found!"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
